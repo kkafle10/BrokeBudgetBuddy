@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broke Budget Buddy</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tracker/style.css' %}">
+
+</head>
+<body>
+  <div class="container">
+    {% if user.is_authenticated %}
+      <p class="welcome">Welcome, {{ user.username }}!</p>
+
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-logout">Logout</button>
+  </form>
+    {% else %}
+      <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a></p>
+    {% endif %}
+
+    <h1>Expense Tracker</h1>
+
+    <section>
+    <p class="stat-label">Budget: ${{ budget }}</p>
+    <p class="stat-label">Total Spent: ${{ total }}</p>
+    <p class="stat-label {{ balance_class }}">Remaining Balance: ${{ balance }}</p>
+    </section>
+    <!-- Alert Message -->
+    <div class="{{ status_class }}">{{ status }}</div>
+
+    <h2>Add an Expense</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-add">Add Expense</button>
+    </form>
+
+    <ul>
+        {% for expense in expenses %}
+        <li>
+            {{ expense.date }} - {{ expense.category }}: ${{ expense.amount }} ({{expense.note }})
+            <a href="{% url 'delete_expense' expense.id %}" style="color: red; margin-left: 10px;">🗑️ Delete</a>
+        </li>
+        {% empty %}
+        <li>No expenses yet!</li>
+        {% endfor %}
+    </ul>
+    </div>
+</body>
+</html>

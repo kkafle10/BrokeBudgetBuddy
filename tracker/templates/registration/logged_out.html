@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logged Out</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tracker/style.css' %}">
+</head>
+<body>
+    <h2>You’ve been logged out.</h2>
+    <p><a href="{% url 'login' %}">Log in again</a></p>
+</body>
+</html>
